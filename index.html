@@ -1,20 +1,45 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soul Calendar 2026</title>
+<title>Soul Calendar 2026 | Asheesh Creation</title>
 
-<!-- jsPDF CDN -->
+<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2canvas -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
+:root{
+--gold:#c9a24d;
+--bg:#0e0e0e;
+--card:#161616;
+}
+*{box-sizing:border-box}
 body{
 margin:0;
 font-family:Georgia, serif;
-background:#0e0e0e;
+background:var(--bg);
 color:#eaeaea;
+overflow-x:hidden;
 }
+
+/* TOGGLE */
+.toggle{
+position:fixed;
+top:15px;
+right:15px;
+background:var(--gold);
+color:#000;
+padding:8px 16px;
+border-radius:20px;
+font-size:.8rem;
+cursor:pointer;
+z-index:999;
+}
+
+/* HEADER */
 header{
 min-height:100vh;
 display:flex;
@@ -24,57 +49,110 @@ text-align:center;
 padding:40px;
 background:radial-gradient(circle at top,#1c1c1c,#0e0e0e);
 }
-h1{color:#c9a24d;font-size:3rem;}
-p{opacity:.9}
-.btn{
-padding:12px 28px;
-border:1px solid #c9a24d;
-color:#c9a24d;
-border-radius:30px;
-text-decoration:none;
-margin:10px;
-cursor:pointer;
+header .wrap{
+animation:fadeUp 1.5s ease forwards;
 }
-.btn:hover{background:#c9a24d;color:#0e0e0e;}
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
+}
+h1{
+font-size:3rem;
+color:var(--gold);
+letter-spacing:2px;
+}
+.subtitle{
+font-size:1.1rem;
+opacity:.9;
+margin:20px auto;
+max-width:600px;
+}
+.btn{
+display:inline-block;
+margin:10px;
+padding:12px 28px;
+border:1px solid var(--gold);
+color:var(--gold);
+border-radius:30px;
+cursor:pointer;
+transition:.3s;
+}
+.btn:hover{
+background:var(--gold);
+color:#000;
+}
 
+/* SECTION */
 section{padding:80px 8%;}
+.section-title{
+text-align:center;
+font-size:2rem;
+color:var(--gold);
+margin-bottom:50px;
+}
+
+/* CALENDAR */
 .calendar{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:30px;
+gap:35px;
 }
 .month{
-background:#161616;
-padding:20px;
-border-radius:18px;
+background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(0,0,0,.7));
+backdrop-filter:blur(6px);
+padding:25px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.08);
+transition:.4s;
 }
-.month h3{color:#c9a24d;}
-.shayari{font-size:.95rem;line-height:1.7;margin-bottom:10px;}
+.month:hover{
+transform:translateY(-10px) scale(1.02);
+box-shadow:0 25px 60px rgba(0,0,0,.9);
+}
+.month h3{
+margin:0 0 10px;
+color:var(--gold);
+font-size:1.4rem;
+}
+.shayari{
+font-size:.95rem;
+line-height:1.8;
+opacity:.9;
+margin-bottom:12px;
+animation:textFade 1.5s ease;
+}
+@keyframes textFade{
+from{opacity:0}
+to{opacity:1}
+}
+
+/* DATES */
 .dates{
 display:grid;
 grid-template-columns:repeat(7,1fr);
-gap:5px;
+gap:6px;
 }
 .date{
 background:#1f1f1f;
 padding:6px;
 text-align:center;
 border-radius:6px;
-font-size:.8rem;
+font-size:.75rem;
 }
-.festival{background:#c9a24d;color:#0e0e0e;font-weight:bold;}
-.toggle{
-position:fixed;
-top:15px;
-right:15px;
-background:#c9a24d;
-color:#0e0e0e;
-padding:8px 14px;
-border-radius:20px;
-cursor:pointer;
-font-size:.8rem;
+.festival{
+background:var(--gold);
+color:#000;
+font-weight:bold;
 }
-footer{text-align:center;padding:30px;font-size:.8rem;opacity:.7;}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:35px;
+font-size:.8rem;
+opacity:.7;
+background:#0b0b0b;
+}
 </style>
 </head>
 
@@ -83,55 +161,62 @@ footer{text-align:center;padding:30px;font-size:.8rem;opacity:.7;}
 <div class="toggle" onclick="toggleLang()">EN / हिंदी</div>
 
 <header>
-<div>
-<h1 id="title">SOUL CALENDAR 2026</h1>
-<p id="subtitle">यह कैलेंडर तारीख़ नहीं, एहसास गिनता है…</p>
+<div class="wrap">
+<h1>SOUL CALENDAR 2026</h1>
+<div class="subtitle" id="subtitle">
+यह कैलेंडर तारीख़ नहीं, एहसास गिनता है…
+</div>
 <div class="btn" onclick="generatePDF()">📄 Download PDF</div>
+<div class="btn" onclick="exportStory()">📱 Instagram Story</div>
 </div>
 </header>
 
 <section>
+<h2 class="section-title">2026 • Months • Emotions</h2>
 <div class="calendar" id="calendar"></div>
 </section>
 
 <footer>
-© 2026 • Asheesh Creation • Dil se likha — dil tak
+© 2026 • SOUL CALENDAR • ✍️ Asheesh Creation<br>
+Dil se likha — dil tak
 </footer>
 
 <script>
 let lang="hi";
 
-const months = [
-{hi:"जनवरी",en:"January",days:31,shayari_hi:"नया साल, वही खामोशी।",shayari_en:"New year, same silence.",festivals:[14,26]},
-{hi:"फ़रवरी",en:"February",days:28,shayari_hi:"यादों का महीना।",shayari_en:"Month of memories.",festivals:[15]},
-{hi:"मार्च",en:"March",days:31,shayari_hi:"रंग और खालीपन।",shayari_en:"Colors and emptiness.",festivals:[4]},
-{hi:"अप्रैल",en:"April",days:30,shayari_hi:"खामोश ज़ख़्म।",shayari_en:"Silent wounds.",festivals:[14]},
-{hi:"मई",en:"May",days:31,shayari_hi:"थोड़ी शांति।",shayari_en:"A little peace.",festivals:[1]},
-{hi:"जून",en:"June",days:30,shayari_hi:"खुद से बातें।",shayari_en:"Talking to myself.",festivals:[21]},
-{hi:"जुलाई",en:"July",days:31,shayari_hi:"भीगी यादें।",shayari_en:"Soaked memories.",festivals:[]},
-{hi:"अगस्त",en:"August",days:31,shayari_hi:"आज़ादी और क़ैद।",shayari_en:"Freedom and chains.",festivals:[15]},
-{hi:"सितंबर",en:"September",days:30,shayari_hi:"पास आती यादें।",shayari_en:"Memories return.",festivals:[]},
-{hi:"अक्टूबर",en:"October",days:31,shayari_hi:"शीशे सा दिल।",shayari_en:"Glass-like heart.",festivals:[2]},
-{hi:"नवंबर",en:"November",days:30,shayari_hi:"अंधेरा भी अपना।",shayari_en:"Darkness feels known.",festivals:[]},
-{hi:"दिसंबर",en:"December",days:31,shayari_hi:"साल का बोझ।",shayari_en:"Weight of the year.",festivals:[25]}
+const data=[
+{hi:"जनवरी",en:"January",days:31,hiS:["नया साल, वही खामोशी।","शुरुआत भी अधूरी सी लगी।"],enS:["New year, same silence.","Even beginnings felt incomplete."],fest:[14,26]},
+{hi:"फ़रवरी",en:"February",days:28,hiS:["मोहब्बत कम, यादें ज़्यादा।"],enS:["Less love, more memories."],fest:[15]},
+{hi:"मार्च",en:"March",days:31,hiS:["रंग भी खाली लगे।"],enS:["Even colors felt hollow."],fest:[4]},
+{hi:"अप्रैल",en:"April",days:30,hiS:["कुछ ज़ख़्म बोलते नहीं।"],enS:["Some wounds stay silent."],fest:[14]},
+{hi:"मई",en:"May",days:31,hiS:["थोड़ी शांति मिली।"],enS:["Found a little peace."],fest:[1]},
+{hi:"जून",en:"June",days:30,hiS:["खुद से बातें बढ़ीं।"],enS:["Talked more with myself."],fest:[21]},
+{hi:"जुलाई",en:"July",days:31,hiS:["यादें भीग गईं।"],enS:["Memories got soaked."],fest:[]},
+{hi:"अगस्त",en:"August",days:31,hiS:["आज़ादी और क़ैद।"],enS:["Freedom and chains."],fest:[15]},
+{hi:"सितंबर",en:"September",days:30,hiS:["कुछ लोग लौट आते हैं।"],enS:["Some people return."],fest:[]},
+{hi:"अक्टूबर",en:"October",days:31,hiS:["शीशे सा दिल।"],enS:["A glass-like heart."],fest:[2]},
+{hi:"नवंबर",en:"November",days:30,hiS:["अंधेरा भी अपना लगा।"],enS:["Darkness felt familiar."],fest:[]},
+{hi:"दिसंबर",en:"December",days:31,hiS:["साल थका हुआ था।"],enS:["The year felt tired."],fest:[25]}
 ];
 
-function renderCalendar(){
+function render(){
 const cal=document.getElementById("calendar");
 cal.innerHTML="";
-months.forEach(m=>{
-let box=document.createElement("div");
+data.forEach(m=>{
+const box=document.createElement("div");
 box.className="month";
+const sh=(lang==="hi"?m.hiS:m.enS);
+const line=sh[Math.floor(Math.random()*sh.length)];
 box.innerHTML=`<h3>${lang==="hi"?m.hi:m.en}</h3>
-<div class="shayari">${lang==="hi"?m.shayari_hi:m.shayari_en}</div>`;
-let grid=document.createElement("div");
+<div class="shayari">${line}</div>`;
+const grid=document.createElement("div");
 grid.className="dates";
 for(let d=1;d<=m.days;d++){
-let day=document.createElement("div");
-day.className="date";
-if(m.festivals.includes(d)) day.classList.add("festival");
-day.innerText=d;
-grid.appendChild(day);
+const el=document.createElement("div");
+el.className="date";
+if(m.fest.includes(d)) el.classList.add("festival");
+el.innerText=d;
+grid.appendChild(el);
 }
 box.appendChild(grid);
 cal.appendChild(box);
@@ -141,26 +226,61 @@ cal.appendChild(box);
 function toggleLang(){
 lang=lang==="hi"?"en":"hi";
 document.getElementById("subtitle").innerText=
-lang==="hi"?"यह कैलेंडर तारीख़ नहीं, एहसास गिनता है…":"This calendar counts feelings, not dates…";
-renderCalendar();
+lang==="hi"
+?"यह कैलेंडर तारीख़ नहीं, एहसास गिनता है…"
+:"This calendar counts feelings, not dates…";
+render();
 }
 
 function generatePDF(){
-const { jsPDF } = window.jspdf;
+const {jsPDF}=window.jspdf;
 const pdf=new jsPDF();
 pdf.setFontSize(16);
 pdf.text("SOUL CALENDAR 2026",20,20);
 pdf.setFontSize(10);
-let y=30;
-months.forEach(m=>{
-pdf.text((lang==="hi"?m.hi:m.en)+" – "+(lang==="hi"?m.shayari_hi:m.shayari_en),20,y);
+let y=35;
+data.forEach(m=>{
+const line=(lang==="hi"?m.hiS:m.enS)[0];
+pdf.text((lang==="hi"?m.hi:m.en)+" – "+line,20,y);
 y+=8;
 if(y>280){pdf.addPage();y=20;}
 });
 pdf.save("Soul_Calendar_2026.pdf");
 }
 
-renderCalendar();
+function exportStory(){
+const pick=data[Math.floor(Math.random()*data.length)];
+const line=(lang==="hi"?pick.hiS:pick.enS)[0];
+
+const box=document.createElement("div");
+box.style.width="1080px";
+box.style.height="1920px";
+box.style.background="#0e0e0e";
+box.style.color="#eaeaea";
+box.style.padding="140px";
+box.style.fontFamily="Georgia, serif";
+box.innerHTML=`
+<h1 style="color:#c9a24d;font-size:72px;text-align:center;">
+SOUL CALENDAR 2026
+</h1>
+<p style="margin-top:120px;font-size:40px;line-height:1.6;text-align:center;">
+"${line}"
+</p>
+<p style="position:absolute;bottom:120px;width:100%;text-align:center;font-size:28px;opacity:.7;">
+✍️ Asheesh Creation
+</p>`;
+document.body.appendChild(box);
+
+html2canvas(box,{scale:2}).then(c=>{
+const a=document.createElement("a");
+a.download="Soul_Calendar_Story.png";
+a.href=c.toDataURL("image/png");
+a.click();
+document.body.removeChild(box);
+});
+}
+
+render();
 </script>
 
 </body>
